@@ -1,7 +1,7 @@
 module.exports = {
-    tags: [
-        {
-            name: "Rides",
-        },
-    ],
+  tags: [
+    {
+      name: 'Rides',
+    },
+  ],
 };
