@@ -11,6 +11,10 @@ The goal of these exercises are to assess your proficiency in software engineeri
 5. Run `npm start`
 6. Hit the server to test health `curl localhost:8010/health` and expect a `200` response 
 
+## API Documentation
+
+1. API documentation url `http::localhost:8010/api-docs`
+
 ## Tasks
 
 Below will be your set of tasks to accomplish. Please work on each of these tasks in order. Success criteria will be defined clearly for each task
