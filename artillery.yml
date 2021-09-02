@@ -1,0 +1,45 @@
+config:
+  target: "http://localhost:8010"
+  phases:
+    - duration: 30
+      arrivalRate: 5
+      ramptTo: 25
+  variables:
+    start_lat:
+      - "41.40338"
+    start_long:
+      - "2.17403"
+    end_lat:
+      - "41.40338"
+    end_long:
+      - "2.17403"
+    rider_name:
+      - "Mock Rider"
+    driver_name:
+      - "John Doe"
+    driver_vehicle:
+      - "Mock Vehicle"
+
+scenarios:
+  - name: 'Create ride'
+    flow:
+      - post:
+          url: "/rides"
+          json:
+            start_lat: "{{ start_lat }}"
+            start_long: "{{ start_long }}"
+            end_lat: "{{ end_lat }}"
+            end_long: "{{ end_long }}"
+            rider_name: "{{ rider_name }}"
+            driver_name: "{{ driver_name }}"
+            driver_vehicle: "{{ driver_vehicle }}"
+
+  - name: "Get rides"
+    flow:
+      - get:
+          url: "/rides?limit=10&page=1"
+
+  - name: "Get ride"
+    flow:
+      - get:
+          url: "/rides/1"
