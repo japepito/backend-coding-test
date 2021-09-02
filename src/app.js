@@ -8,6 +8,7 @@ const jsonParser = bodyParser.json();
 
 const swaggerUI = require('swagger-ui-express');
 const docs = require('./docs');
+const paginateService = require('./utilities/paginate-service');
 
 module.exports = (db) => {
   app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(docs));
@@ -110,7 +111,14 @@ module.exports = (db) => {
   });
 
   app.get('/rides', (req, res) => {
-    db.all('SELECT * FROM Rides', function (err, rows) {
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
+
+    let query = `SELECT * FROM Rides LIMIT(${limit}) OFFSET(${
+      limit * (page - 1)
+    })`;
+
+    db.all(query, function (err, rows) {
       if (err) {
         return res.send({
           error_code: 'SERVER_ERROR',
@@ -125,7 +133,9 @@ module.exports = (db) => {
         });
       }
 
-      res.send(rows);
+      const paginate = paginateService.paginate(rows, limit, page);
+
+      res.send(paginate);
     });
   });
 

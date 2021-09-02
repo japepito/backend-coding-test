@@ -3,7 +3,26 @@ module.exports = {
     tags: ['Rides'],
     description: 'Get rides',
     operationId: 'getRides',
-    parameters: [],
+    parameters: [
+      {
+        name: 'limit',
+        in: 'query',
+        schema: {
+          type: 'number',
+          description: 'Allowed number of returned rides',
+          example: 10,
+        },
+      },
+      {
+        name: 'page',
+        in: 'query',
+        schema: {
+          type: 'number',
+          description: 'Current page',
+          example: 1,
+        },
+      },
+    ],
     responses: {
       200: {
         description: 'Rides obtained successfully',

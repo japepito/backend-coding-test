@@ -9,27 +9,27 @@ module.exports = {
       Ride: {
         type: 'object',
         properties: {
-          id: {
+          rideID: {
             type: 'number',
             description: 'Ride identification number',
             example: 1,
           },
-          startLatitude: {
+          startLat: {
             type: 'number',
             description: 'Start latitude',
             example: 41.40338,
           },
-          startLongitude: {
+          startLong: {
             type: 'number',
             description: 'Start longitude',
             example: 2.17403,
           },
-          endLatitude: {
+          endLat: {
             type: 'number',
             description: 'End latitude',
             example: 41.40338,
           },
-          endLongitude: {
+          endLong: {
             type: 'number',
             description: 'End longitude',
             example: 2.17403,
@@ -46,55 +46,51 @@ module.exports = {
           },
           driverVehicle: {
             type: 'string',
-            description: 'Driver\'s Vehicle',
+            description: 'Drivers Vehicle',
             example: 'Van',
           },
-          createdAt: {
+          created: {
             type: 'string',
             description: 'Created date',
-          },
-          updatedAt: {
-            type: 'string',
-            description: 'Updated date',
           },
         },
       },
       RideInput: {
         type: 'object',
         properties: {
-          startLatitude: {
+          start_lat: {
             type: 'number',
             description: 'Start latitude',
             example: 41.40338,
           },
-          startLongitude: {
+          start_long: {
             type: 'number',
             description: 'Start longitude',
             example: 2.17403,
           },
-          endLatitude: {
+          end_lat: {
             type: 'number',
             description: 'End latitude',
             example: 41.40338,
           },
-          endLongitude: {
+          end_long: {
             type: 'number',
             description: 'End longitude',
             example: 2.17403,
           },
-          riderName: {
+          rider_name: {
             type: 'string',
             description: 'Rider name',
             example: 'John Doe',
           },
-          driverName: {
+          driver_name: {
             type: 'string',
             description: 'Driver name',
             example: 'John Doe',
           },
-          driverVehicle: {
+          driver_vehicle: {
             type: 'string',
-            description: 'Driver\'s Vehicle',
+            description: 'Drivers Vehicle',
             example: 'Van',
           },
         },

@@ -14,8 +14,19 @@ module.exports = {
       },
     },
     responses: {
-      201: {
+      200: {
         description: 'Ride created successfully',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'array',
+              items: {
+                type: 'object',
+                $ref: '#/components/schemas/Ride',
+              },
+            },
+          },
+        },
       },
       500: {
         description: 'Internal server error',
