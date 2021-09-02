@@ -1,19 +1,12 @@
 'use strict';
 
+const { expect } = require('chai');
 const request = require('supertest');
 
-const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database(':memory:');
-
-const app = require('../src/app')(db);
-const buildSchemas = require('../src/schemas');
+const app = require('../src/app')();
+const { db, buildSchemas } = require('../src/repositories');
 
 describe('API tests', () => {
-  let mockErrorResponse = {
-    error_code: '',
-    message: '',
-  };
-
   before((done) => {
     db.serialize((err) => {
       if (err) {
@@ -21,7 +14,6 @@ describe('API tests', () => {
       }
 
       buildSchemas(db);
-
       done();
     });
   });
@@ -53,17 +45,7 @@ describe('API tests', () => {
         end_long: 2.17403,
         rider_name: 'Mock Rider',
         driver_name: 'John Doe',
-        driver_vehicle: 'Mock Vehicle',
-      };
-
-      let mockResponse = {
-        startLat: 41.40338,
-        startLong: 2.17403,
-        endLat: 41.40338,
-        endLong: 2.17403,
-        riderName: 'Mock Rider',
-        driverName: 'John Doe',
-        driverVehicle: 'Mock Vehicle',
+        driver_vehicle: 'Mock Vehicle'
       };
 
       request(app)
@@ -71,16 +53,17 @@ describe('API tests', () => {
         .send(mockReqBody)
         .set('Accept', 'application/json')
         .expect('Content-Type', 'application/json; charset=utf-8')
-        .expect((res) => {
-          mockResponse = Object.assign(mockResponse, res.body[0]);
-        })
-        .expect(200, [mockResponse], done);
+        .expect(200)
+        .end((err) => {
+          if (err) return done(err);
+          done();
+        });
     });
 
     it('should return error for invalid start latitude or longitude', (done) => {
       const mockReqBody = {
         start_lat: -100,
-        start_long: 200,
+        start_long: 200
       };
 
       request(app)
@@ -88,16 +71,17 @@ describe('API tests', () => {
         .send(mockReqBody)
         .set('Accept', 'application/json')
         .expect('Content-Type', 'application/json; charset=utf-8')
-        .expect((res) => {
-          mockErrorResponse = Object.assign(mockErrorResponse, res.body);
-        })
-        .expect(200, mockErrorResponse, done);
+        .expect(400)
+        .end((err) => {
+          if (err) return done(err);
+          done();
+        });
     });
 
     it('should return error for invalid end latitude or longitude', (done) => {
       const mockReqBody = {
         end_lat: -100,
-        end_long: 200,
+        end_long: 200
       };
 
       request(app)
@@ -105,10 +89,11 @@ describe('API tests', () => {
         .send(mockReqBody)
         .set('Accept', 'application/json')
         .expect('Content-Type', 'application/json; charset=utf-8')
-        .expect((res) => {
-          mockErrorResponse = Object.assign(mockErrorResponse, res.body);
-        })
-        .expect(200, mockErrorResponse, done);
+        .expect(400)
+        .end((err) => {
+          if (err) return done(err);
+          done();
+        });
     });
 
     it('should return error for invalid rider name', (done) => {
@@ -117,7 +102,7 @@ describe('API tests', () => {
         start_long: 2.17403,
         end_lat: 41.40338,
         end_long: 2.17403,
-        rider_name: 1,
+        rider_name: 1
       };
 
       request(app)
@@ -125,10 +110,11 @@ describe('API tests', () => {
         .send(mockReqBody)
         .set('Accept', 'application/json')
         .expect('Content-Type', 'application/json; charset=utf-8')
-        .expect((res) => {
-          mockErrorResponse = Object.assign(mockErrorResponse, res.body);
-        })
-        .expect(200, mockErrorResponse, done);
+        .expect(400)
+        .end((err) => {
+          if (err) return done(err);
+          done();
+        });
     });
 
     it('should return error for invalid driver name', (done) => {
@@ -138,7 +124,7 @@ describe('API tests', () => {
         end_lat: 41.40338,
         end_long: 2.17403,
         rider_name: 'Mock Rider',
-        driver_name: false,
+        driver_name: false
       };
 
       request(app)
@@ -146,10 +132,11 @@ describe('API tests', () => {
         .send(mockReqBody)
         .set('Accept', 'application/json')
         .expect('Content-Type', 'application/json; charset=utf-8')
-        .expect((res) => {
-          mockErrorResponse = Object.assign(mockErrorResponse, res.body);
-        })
-        .expect(200, mockErrorResponse, done);
+        .expect(400)
+        .end((err) => {
+          if (err) return done(err);
+          done();
+        });
     });
 
     it('should return error for invalid driver vehicle', (done) => {
@@ -160,7 +147,7 @@ describe('API tests', () => {
         end_long: 2.17403,
         rider_name: 'Mock Rider',
         driver_name: 'Mock Driver',
-        driver_vehicle: 3,
+        driver_vehicle: 3
       };
 
       request(app)
@@ -168,10 +155,11 @@ describe('API tests', () => {
         .send(mockReqBody)
         .set('Accept', 'application/json')
         .expect('Content-Type', 'application/json; charset=utf-8')
-        .expect((res) => {
-          mockErrorResponse = Object.assign(mockErrorResponse, res.body);
-        })
-        .expect(200, mockErrorResponse, done);
+        .expect(400)
+        .end((err) => {
+          if (err) return done(err);
+          done();
+        });
     });
 
     it('should return internal server error', (done) => {
@@ -185,7 +173,7 @@ describe('API tests', () => {
         end_long: 2.17403,
         rider_name: 'Mock Rider',
         driver_name: 'John Doe',
-        driver_vehicle: 'Mock Vehicle',
+        driver_vehicle: 'Mock Vehicle'
       };
 
       request(app)
@@ -193,10 +181,11 @@ describe('API tests', () => {
         .send(mockReqBody)
         .set('Accept', 'application/json')
         .expect('Content-Type', 'application/json; charset=utf-8')
-        .expect((res) => {
-          mockErrorResponse = Object.assign(mockErrorResponse, res.body);
-        })
-        .expect(200, mockErrorResponse, done);
+        .expect(500)
+        .end((err) => {
+          if (err) return done(err);
+          done();
+        });
     });
   });
 
@@ -211,7 +200,7 @@ describe('API tests', () => {
         2.17403,
         'Mock Rider',
         'John Doe',
-        'Mock Vehicle',
+        'Mock Vehicle'
       ];
 
       db.serialize(() => {
@@ -234,38 +223,26 @@ describe('API tests', () => {
     });
 
     it('should return a paginate object of list of rides', (done) => {
-      let mockDataResponse = {
-        startLat: 41.40338,
-        startLong: 2.17403,
-        endLat: 41.40338,
-        endLong: 2.17403,
-        riderName: 'Mock Rider',
-        driverName: 'John Doe',
-        driverVehicle: 'Mock Vehicle',
-      };
-
       const mockQueryParams = {
         limit: 1,
-        page: 1,
+        page: 1
       };
 
       request(app)
         .get('/rides')
         .query(mockQueryParams)
         .expect('Content-Type', 'application/json; charset=utf-8')
-        .expect((res) => {
-          mockDataResponse = Object.assign(mockDataResponse, res.body.data[0]);
-        })
-        .expect(
-          200,
-          {
-            data: [mockDataResponse],
-            totalCount: 1,
-            limit: mockQueryParams.limit,
-            page: mockQueryParams.page,
-          },
-          done
-        );
+        .expect(200)
+        .then((res) => {
+          expect(res.body).to.be.an('object');
+          expect(res.body).to.include.all.keys(
+            'data',
+            'totalCount',
+            'limit',
+            'page'
+          );
+          done();
+        });
     });
 
     it('should return error of not found rides', (done) => {
@@ -273,26 +250,40 @@ describe('API tests', () => {
 
       db.all(deleteQuery, () => {});
 
+      const mockQueryParams = {
+        limit: 1,
+        page: 1
+      };
+
       request(app)
         .get('/rides')
+        .query(mockQueryParams)
         .expect('Content-Type', 'application/json; charset=utf-8')
-        .expect((res) => {
-          mockErrorResponse = Object.assign(mockErrorResponse, res.body);
-        })
-        .expect(200, mockErrorResponse, done);
+        .expect(404)
+        .end((err) => {
+          if (err) return done(err);
+          done();
+        });
     });
 
     it('should return internal server error', (done) => {
       const dropSchema = 'DROP TABLE IF EXISTS Rides';
       db.run(dropSchema, () => {});
 
+      const mockQueryParams = {
+        limit: 1,
+        page: 1
+      };
+
       request(app)
         .get('/rides')
+        .query(mockQueryParams)
         .expect('Content-Type', 'application/json; charset=utf-8')
-        .expect((res) => {
-          mockErrorResponse = Object.assign(mockErrorResponse, res.body);
-        })
-        .expect(200, mockErrorResponse, done);
+        .expect(500)
+        .end((err) => {
+          if (err) return done(err);
+          done();
+        });
     });
   });
 
@@ -309,7 +300,7 @@ describe('API tests', () => {
         2.17403,
         'Mock Rider',
         'John Doe',
-        'Mock Vehicle',
+        'Mock Vehicle'
       ];
 
       db.serialize(() => {
@@ -328,23 +319,14 @@ describe('API tests', () => {
     });
 
     it('should return a single entity of ride', (done) => {
-      let mockDataResponse = {
-        startLat: 41.40338,
-        startLong: 2.17403,
-        endLat: 41.40338,
-        endLong: 2.17403,
-        riderName: 'Mock Rider',
-        driverName: 'John Doe',
-        driverVehicle: 'Mock Vehicle',
-      };
-
       request(app)
         .get(`/rides/${lastInsertedID[0]}`)
         .expect('Content-Type', 'application/json; charset=utf-8')
-        .expect((res) => {
-          mockDataResponse = Object.assign(mockDataResponse, res.body[0]);
-        })
-        .expect(200, [mockDataResponse], done);
+        .expect(200)
+        .end((err) => {
+          if (err) return done(err);
+          done();
+        });
     });
 
     it('should return error of not found ride', (done) => {
@@ -355,10 +337,11 @@ describe('API tests', () => {
       request(app)
         .get('/rides/1')
         .expect('Content-Type', 'application/json; charset=utf-8')
-        .expect((res) => {
-          mockErrorResponse = Object.assign(mockErrorResponse, res.body);
-        })
-        .expect(200, mockErrorResponse, done);
+        .expect(404)
+        .end((err) => {
+          if (err) return done(err);
+          done();
+        });
     });
 
     it('should return internal server error', (done) => {
@@ -368,10 +351,11 @@ describe('API tests', () => {
       request(app)
         .get('/rides/1')
         .expect('Content-Type', 'application/json; charset=utf-8')
-        .expect((res) => {
-          mockErrorResponse = Object.assign(mockErrorResponse, res.body);
-        })
-        .expect(200, mockErrorResponse, done);
+        .expect(500)
+        .end((err) => {
+          if (err) return done(err);
+          done();
+        });
     });
   });
 });
