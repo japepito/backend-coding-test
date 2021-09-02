@@ -28,6 +28,9 @@ module.exports = {
           },
         },
       },
+      400: {
+        description: 'Bad request',
+      },
       500: {
         description: 'Internal server error',
       },

@@ -7,7 +7,7 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "mocha tests",
+    "test": "mocha tests --exit",
     "coverage": "nyc npm run test",
     "start": "NODE_ENV=development node index.js",
     "lint": "eslint \"**/*.js\" --fix"

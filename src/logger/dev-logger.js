@@ -7,7 +7,6 @@ function buildDevLogger() {
 
   return createLogger({
     format: format.combine(
-      format.colorize(),
       format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
       format.errors({ stack: true }),
       loggerFormat

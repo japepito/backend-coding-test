@@ -20,7 +20,10 @@ module.exports = {
         content: {
           'application/json': {
             schema: {
-              $ref: '#/components/schemas/Ride',
+              type: 'array',
+              items: {
+                $ref: '#/components/schemas/Ride',
+              },
             },
           },
         },
