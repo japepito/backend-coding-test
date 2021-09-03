@@ -9,7 +9,7 @@
   "scripts": {
     "test": "mocha tests --exit",
     "coverage": "nyc npm run test",
-    "test:load": "artillery run artillery.yml",
+    "test:load": "pm2 start --name \"backend-coding-test\" \"index.js\" && artillery run artillery.yml && pm2 stop \"backend-coding-test\"",
     "start": "NODE_ENV=development node index.js",
     "lint": "eslint \"**/*.js\" --fix"
   },
@@ -26,7 +26,7 @@
     "winston": "^3.3.3"
   },
   "devDependencies": {
-    "artillery": "^1.7.8",
+    "artillery": "^1.6.2",
     "chai": "^4.3.4",
     "eslint": "^6.8.0",
     "mocha": "^6.1.4",

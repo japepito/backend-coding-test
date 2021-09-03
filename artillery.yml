@@ -21,7 +21,13 @@ config:
       - "Mock Vehicle"
 
 scenarios:
-  - name: 'Create ride'
+  - name: "et health"
+    flow:
+      - get:
+          url: "/health"
+          expect:
+            - statusCode: 200
+  - name: "Create ride"
     flow:
       - post:
           url: "/rides"
@@ -33,13 +39,27 @@ scenarios:
             rider_name: "{{ rider_name }}"
             driver_name: "{{ driver_name }}"
             driver_vehicle: "{{ driver_vehicle }}"
-
+          expect:
+            - statusCode:
+              - 200
+              - 400
+              - 500
   - name: "Get rides"
     flow:
       - get:
           url: "/rides?limit=10&page=1"
+          expect:
+            - statusCode:
+              - 200
+              - 404
+              - 500
 
   - name: "Get ride"
     flow:
       - get:
           url: "/rides/1"
+          expect:
+            - statusCode:
+              - 200
+              - 404
+              - 500
